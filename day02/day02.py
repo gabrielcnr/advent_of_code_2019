@@ -1,3 +1,5 @@
+import itertools
+
 ADD = 1
 MUL = 2
 HALT = 99
@@ -32,5 +34,19 @@ def part1():
     return run_intcode(intcode)
 
 
+def part2():
+    _intcode = read_input()
+    for noun, verb in itertools.product(range(100), range(100)):
+        intcode = _intcode[:]
+        intcode[1] = noun
+        intcode[2] = verb
+        output = run_intcode(intcode)
+        if output == 19690720:
+            return noun, verb
+    return None, None
+
 if __name__ == '__main__':
     print(part1())
+    noun, verb = part2()
+    if noun is not None:
+        print(f'part2: {100 * noun + verb}')

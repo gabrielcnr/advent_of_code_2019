@@ -1,10 +1,18 @@
-from day03 import closest_intersecting_point, calculate_distance
+from day03 import (closest_intersecting_point, calculate_distance,
+                   calculate_intersection_with_fewest_steps)
 
-def __test_simple():
+def test_simple():
     wire_1 = ['R8', 'U5', 'L5', 'D3']
     wire_2 = ['U7', 'R6', 'D4', 'L4']
     p = closest_intersecting_point(wire_1, wire_2)
     assert 6 == calculate_distance(p)
+
+
+def test_fewest_intersections_simple():
+    wire_1 = ['R8', 'U5', 'L5', 'D3']
+    wire_2 = ['U7', 'R6', 'D4', 'L4']
+    assert 40 == calculate_intersection_with_fewest_steps(wire_1, wire_2)
+
 
 def test_2():
     wire_1 = ['R75', 'D30', 'R83', 'U83', 'L12', 'D49', 'R71', 'U7', 'L72']

@@ -2,12 +2,22 @@ import itertools
 
 
 def closest_intersecting_point(wire_1, wire_2):
-    points_1 = set(iter_wire_points(wire_1))
-    points_2 = set(iter_wire_points(wire_2))
-    intersection = points_1 & points_2
-    intersection.remove((0, 0))
-    sorted_intersection = sorted(intersection, key=calculate_distance)
+    intersections, _, _ = calculate_intersections(wire_1, wire_2)
+    sorted_intersection = sorted(intersections, key=calculate_distance)
     return sorted_intersection[0]
+
+
+def calculate_intersections(wire_1, wire_2):
+    points_1 = {p: i for i, p in enumerate(iter_wire_points(wire_1), 1)}
+    points_2 = {p: i for i, p in enumerate(iter_wire_points(wire_2), 1)}
+    intersections = set(points_1) & set(points_2)
+    return intersections, points_1, points_2
+
+
+def calculate_intersection_with_fewest_steps(wire_1, wire_2):
+    intersections, points_1, points_2 = calculate_intersections(wire_1, wire_2)
+    steps = min(points_1[p] + points_2[p] for p in intersections)
+    return steps
 
 
 def calculate_distance(p):
@@ -32,7 +42,9 @@ def iter_wire_points(wire):
         elif direction == 'D':
             xvalues = [x]
             yvalues = range(y, y - offset - 1, -1)
-        for _x, _y in itertools.product(xvalues, yvalues):
+        points = itertools.product(xvalues, yvalues)
+        next(points)  # discard the current
+        for _x, _y in points:
             yield _x, _y
         x, y = _x, _y
 
@@ -52,5 +64,11 @@ def part1():
     return distance
 
 
+def part2():
+    wire_1, wire_2 = read_input()
+    return calculate_intersection_with_fewest_steps(wire_1, wire_2)
+
+
 if __name__ == '__main__':
     print(part1())
+    print(part2())

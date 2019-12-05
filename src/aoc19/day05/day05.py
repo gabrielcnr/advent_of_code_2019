@@ -9,7 +9,8 @@ class Mode:
 
 
 def get_input():
-    return 1
+    return 5
+    # return 1
 
 
 def opcode_3(state, pos, modes):
@@ -50,6 +51,45 @@ def opcode_99(state, pos, modes):
     return END
 
 
+# TODO: refactor opcode_5 and opcode_6
+def opcode_5(state, pos, modes):
+    p1_mode, p2_mode, _ = modes
+    p1 = read_value(state, state[pos+1], p1_mode)
+    p2 = read_value(state, state[pos+2], p2_mode)
+    if p1:
+        return p2
+    else:
+        return pos + 3
+
+
+def opcode_6(state, pos, modes):
+    p1_mode, p2_mode, _ = modes
+    p1 = read_value(state, state[pos+1], p1_mode)
+    p2 = read_value(state, state[pos+2], p2_mode)
+    if not p1:
+        return p2
+    else:
+        return pos + 3
+
+
+def opcode_7(state, pos, modes):
+    p1_mode, p2_mode, p3_mode = modes
+    p1 = read_value(state, state[pos + 1], p1_mode)
+    p2 = read_value(state, state[pos + 2], p2_mode)
+    idx = state[pos + 3]
+    state[idx] = int(p1 < p2)
+    return pos + 4
+
+
+def opcode_8(state, pos, modes):
+    p1_mode, p2_mode, p3_mode = modes
+    p1 = read_value(state, state[pos + 1], p1_mode)
+    p2 = read_value(state, state[pos + 2], p2_mode)
+    idx = state[pos + 3]
+    state[idx] = int(p1 == p2)
+    return pos + 4
+
+
 def parse_instruction(n):
     p3_mode, n = divmod(n, 10_000)
     p2_mode, n = divmod(n, 1_000)
@@ -73,7 +113,7 @@ def execute(state, pos):
     if func is not None:
         return func(state, pos, modes)
 
-    assert False, "something very bad happened!"
+    assert False, f"something very bad happened! got opcode {opcode}"
 
 
 def run_intcode(intcode):
@@ -94,5 +134,11 @@ def part1():
     return run_intcode(intcode)
 
 
+def part2():
+    intcode = read_input()
+    return run_intcode(intcode)
+
+
 if __name__ == '__main__':
-    part1()
+    # part1()
+    part2()

@@ -42,11 +42,36 @@ def count_orbits(nodes):
     return sum(len(list(o.traverse())) for o in nodes.values())
 
 
+def count_transfers(nodes, origin, dest):
+    origin = nodes[origin]
+    dest = nodes[dest]
+    p1 = origin.parent
+    p2 = dest.parent
+    p1_path = list(p1.traverse())
+    p2_path = list(p2.traverse())
+
+    for node in p1_path:
+        if node in p2_path:
+            break
+    join_node = node
+
+    steps_from_p1 = p1_path.index(node) + 1
+    steps_from_p2 = p2_path.index(node) + 1
+    return steps_from_p1 + steps_from_p2
+    
+
 def part1():
     text_input = open('input.txt').read()
     nodes = build_graph(text_input)
     return count_orbits(nodes)
 
+def part2():
+    text_input = open('input.txt').read()
+    nodes = build_graph(text_input)
+    return count_transfers(nodes, 'YOU', 'SAN')
+
+
 
 if __name__ == '__main__':
     print(part1())
+    print(part2())

@@ -21,10 +21,20 @@ def build_graph(text_input):
     for line in text_input.splitlines():
         line = line.strip()
         left, right = line.split(')')
-        # left object should already exists
-        left = nodes[left]
-        right = N(right, left)  # the right orbits the left
-        nodes[right.name] = right
+
+        if left not in nodes:
+            left = N(left, None)
+            nodes[left.name] = left
+        else:
+            left = nodes[left]
+
+        if right in nodes:
+            right = nodes[right]
+            right.parent = nodes[left.name]
+        else:
+            right = N(right, left)  # the right orbits the left
+            nodes[right.name] = right
+    
     return nodes
 
 

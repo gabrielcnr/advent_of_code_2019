@@ -4,6 +4,7 @@ from aoc19.day05.day05 import (opcode_3,
                                parse_instruction,
                                Mode,
                                execute,
+                               get_input, output,
                                read_value)
 
 
@@ -13,7 +14,7 @@ def test_opcode_3(mock_get_input):
     ins_pointer = 2
     state = [1, 0, 3, 6, 8, 8, 8, 8]
 
-    new_pos = opcode_3(state, ins_pointer, None)
+    new_pos = opcode_3(state, ins_pointer, None, mock_get_input, output)
 
     assert 4 == new_pos
     assert [1, 0, 3, 6, 8, 8, 777, 8] == state
@@ -27,7 +28,7 @@ def test_opcode_4(mock_get_input, mock_output):
     ins_pointer = 3
     state = [9, 312, 5, 4, 1, 99]
 
-    new_pos = opcode_4(state, ins_pointer, None)
+    new_pos = opcode_4(state, ins_pointer, None, get_input, mock_output)
 
     assert 5 == new_pos
     assert [9, 312, 5, 4, 1, 99] == state
@@ -48,6 +49,6 @@ def test_read_value():
 def test_opcode_1():
     state = [1001, 4, 5, 6, 11, 22, -1, 99]
 
-    execute(state, 0)
+    execute(state, 0, get_input, output)
 
     assert [1001, 4, 5, 6, 11, 22, 16, 99] == state

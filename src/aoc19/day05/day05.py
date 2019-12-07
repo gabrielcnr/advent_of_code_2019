@@ -13,9 +13,9 @@ def get_input():
     # return 1
 
 
-def opcode_3(state, pos, modes):
+def opcode_3(state, pos, modes, get_input_callback, output_callback):
     dest_idx = state[pos + 1]
-    state[dest_idx] = get_input()
+    state[dest_idx] = get_input_callback()
     return pos + 2
 
 
@@ -23,10 +23,10 @@ def output(value):
     print(value)
 
 
-def opcode_4(state, pos, modes):
+def opcode_4(state, pos, modes, get_input_callback, output_callback):
     idx = state[pos + 1]
     value = state[idx]
-    output(value)
+    output_callback(value)
     return pos + 2
 
 
@@ -39,20 +39,20 @@ def _opcode_add_mul(state, pos, modes, op):
     return pos + 4
 
 
-def opcode_1(state, pos, modes):
+def opcode_1(state, pos, modes, get_input_callback, output_callback):
     return _opcode_add_mul(state, pos, modes, operator.add)
 
 
-def opcode_2(state, pos, modes):
+def opcode_2(state, pos, modes, get_input_callback, output_callback):
     return _opcode_add_mul(state, pos, modes, operator.mul)
 
 
-def opcode_99(state, pos, modes):
+def opcode_99(state, pos, modes, get_input_callback, output_callback):
     return END
 
 
 # TODO: refactor opcode_5 and opcode_6
-def opcode_5(state, pos, modes):
+def opcode_5(state, pos, modes, get_input_callback, output_callback):
     p1_mode, p2_mode, _ = modes
     p1 = read_value(state, state[pos+1], p1_mode)
     p2 = read_value(state, state[pos+2], p2_mode)
@@ -62,7 +62,7 @@ def opcode_5(state, pos, modes):
         return pos + 3
 
 
-def opcode_6(state, pos, modes):
+def opcode_6(state, pos, modes, get_input_callback, output_callback):
     p1_mode, p2_mode, _ = modes
     p1 = read_value(state, state[pos+1], p1_mode)
     p2 = read_value(state, state[pos+2], p2_mode)
@@ -72,7 +72,7 @@ def opcode_6(state, pos, modes):
         return pos + 3
 
 
-def opcode_7(state, pos, modes):
+def opcode_7(state, pos, modes, get_input_callback, output_callback):
     p1_mode, p2_mode, p3_mode = modes
     p1 = read_value(state, state[pos + 1], p1_mode)
     p2 = read_value(state, state[pos + 2], p2_mode)
@@ -81,7 +81,7 @@ def opcode_7(state, pos, modes):
     return pos + 4
 
 
-def opcode_8(state, pos, modes):
+def opcode_8(state, pos, modes, get_input_callback, output_callback):
     p1_mode, p2_mode, p3_mode = modes
     p1 = read_value(state, state[pos + 1], p1_mode)
     p2 = read_value(state, state[pos + 2], p2_mode)
@@ -106,21 +106,21 @@ def read_value(state, parameter, mode):
         raise RuntimeError(f'unexpected parameter mode: {mode}')
 
 
-def execute(state, pos):
+def execute(state, pos, get_input_callback, output_callback):
     instruction = state[pos]
     opcode, *modes = parse_instruction(instruction)
     func = globals().get(f'opcode_{opcode}')
     if func is not None:
-        return func(state, pos, modes)
+        return func(state, pos, modes, get_input_callback, output_callback)
 
     assert False, f"something very bad happened! got opcode {opcode}"
 
 
-def run_intcode(intcode):
+def run_intcode(intcode, get_input_callback=get_input, output_callback=output):
     pos = 0
-    while (pos := execute(intcode, pos)) != END:
+    while (pos := execute(intcode, pos, get_input_callback, output_callback)) != END:
         pass
-    print('End.')
+    # print('End.')
 
 
 def read_input():

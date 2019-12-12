@@ -115,7 +115,7 @@ def part2():
 
     def cmp(a, b):
         return (a > b) - (a < b)
-    
+
     for i in (range(3)):
         orig_plane = [x[i] for x in positions]
         orig_velocities = [0 for _ in positions]

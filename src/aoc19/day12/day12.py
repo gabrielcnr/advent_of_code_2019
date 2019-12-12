@@ -70,3 +70,29 @@ def apply_gravity(a, b):
         b_velocity[i] += b_incr
     a.velocity = tuple(a_velocity)
     b.velocity = tuple(b_velocity)
+
+
+def create_moon_system():
+    """
+    <x=4, y=1, z=1>
+    <x=11, y=-18, z=-1>
+    <x=-2, y=-10, z=-4>
+    <x=-7, y=-2, z=14>
+    """
+    m1 = Moon.create((4, 1, 1))
+    m2 = Moon.create((11, -18, -1))
+    m3 = Moon.create((-2, -10, -4))
+    m4 = Moon.create((-7, -2, 14))
+    system = MoonSystem([m1, m2, m3, m4])
+    return system
+
+
+def part1():
+    system = create_moon_system()
+    for _ in range(1000):
+        system.next()
+    return system.total_energy
+
+
+if __name__ == '__main__':
+    print(part1())

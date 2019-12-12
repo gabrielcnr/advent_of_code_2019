@@ -142,19 +142,6 @@ class IntCode:
         else:
             return ValueError
 
-    # def read_value(self, pos):
-    #     # value_or_addr = self.program[pos]
-    #     if mode == Mode.IMMEDIATE:
-    #         idx = pos
-    #     elif mode == Mode.POSITION:
-    #         idx = self.program[pos]
-    #     elif mode == Mode.RELATIVE:
-    #         idx = self._relative_base + self.program[pos]# + self._relative_base]
-    #     else:
-    #         raise RuntimeError(f'unexpected parameter mode: {mode}')
-    #
-    #     return self.program[idx]
-
 
 def part1():
     L = []
@@ -163,8 +150,17 @@ def part1():
     return L
 
 
+def part2():
+    L = []
+    program = IntCode.from_input(get_input=lambda: 2, output=L.append)
+    program.run()
+    return L
 
 
 if __name__ == '__main__':
     print(part1())
-    # part2()
+    import time
+    t0 = time.perf_counter()
+    print(part2())
+    t1 = time.perf_counter()
+    print(f'elapsed {t1-t0:.2f} s')

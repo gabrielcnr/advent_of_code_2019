@@ -84,5 +84,30 @@ def part1():
     return len(r.panels)
 
 
+def part2():
+    r = Robot()
+    r.panels[(0, 0)] = Color.WHITE
+    r.run_from_input()
+    print_panels(r.panels)
+
+
+def print_panels(panels):
+    import sys
+    min_x = min(x for x, y in panels)
+    max_x = max(x for x, y in panels)
+    min_y = min(y for x, y in panels)
+    max_y = max(y for x, y in panels)
+    for y in range(min_y, max_y + 1):
+        sys.stdout.write('\n')
+        for x in range(min_x, max_x + 1):
+            pos = (x, y)
+            color = panels.get(pos, Color.BLACK)
+            if color == Color.BLACK:
+                sys.stdout.write(' ')
+            else:
+                sys.stdout.write('x')
+    # TODO: the image is mirrored -- needs to fix
+
 if __name__ == '__main__':
     print(part1())
+    part2()

@@ -94,5 +94,53 @@ def part1():
     return system.total_energy
 
 
+def part2():
+    """
+    Cycle detection problem
+    """
+    # Part 2:
+    # Find the number of iterations for the universe to repeat
+    # Each plane operates independently (i.e. x relationships have no effect on y or z)
+    # Calculate number of steps for each plane to independently repeat
+    # Total steps is the least common multiple of the three planes' cycles
+    #
+    # Make sure that both position AND velocity reach the original state
+    system = create_moon_system()
+    steps = [0, 0, 0]
+    positions = [m.position for m in system.moons]
+
+    from math import gcd
+    def lcm(a, b):
+        return a * b // gcd(a, b)
+
+    def cmp(a, b):
+        return (a > b) - (a < b)
+    
+    for i in (range(3)):
+        orig_plane = [x[i] for x in positions]
+        orig_velocities = [0 for _ in positions]
+
+        plane = [x[i] for x in positions]
+        velocities = [0 for _ in positions]
+
+        while True:
+            for i1, i2 in itertools.combinations(range(len(plane)), 2):
+                pull = cmp(plane[i1], plane[i2])
+                velocities[i1] -= pull
+                velocities[i2] += pull
+
+            for n, vel in enumerate(velocities):
+                plane[n] += velocities[n]
+
+            steps[i] += 1
+
+            # have we reached our initial state for this plane?
+            if plane == orig_plane and velocities == orig_velocities:
+                break
+
+    total_steps = lcm(lcm(steps[0], steps[1]), steps[2])
+    return total_steps
+
 if __name__ == '__main__':
     print(part1())
+    print(part2())

@@ -20,8 +20,8 @@ class Action:
 
 
 class Color:
-    WHITE = 0
-    BLACK = 1
+    BLACK = 0
+    WHITE = 1
 
 
 class Robot:
@@ -43,7 +43,8 @@ class Robot:
         program.run()
 
     def get_input(self):
-        return self.panels.get(self.pos, Color.BLACK)
+        color = self.panels.get(self.pos, Color.BLACK)
+        return int(color == Color.WHITE)
 
     def output(self, value):
         mode = next(self.mode)
@@ -72,7 +73,7 @@ class Robot:
             incr = 1
         else:
             raise ValueError
-        direction = abs(self.direction + incr) % 4
+        direction = (self.direction + incr + 4) % 4
         self.direction = direction
         self.move()
 

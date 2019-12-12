@@ -23,6 +23,12 @@ def test_sanity():
         r.turn(Turn.RIGHT)
     assert r.pos == (0, 0)
 
+def test_sanity_2():
+    r = Robot()
+    for _ in range(4):
+        r.turn(Turn.LEFT)
+    assert r.pos == (0, 0)
+
 
 def test_example():
     pass

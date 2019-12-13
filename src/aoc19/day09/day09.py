@@ -9,6 +9,13 @@ class Mode:
     RELATIVE = 2
 
 
+def read_input_program():
+    with open('input.txt') as fp:
+        contents = fp.read()
+    program = [int(n) for n in contents.strip().split(',')]
+    return program
+
+
 class IntCode:
     def __init__(self, program, output=None, get_input=None):
         self.pos = 0
@@ -21,9 +28,7 @@ class IntCode:
 
     @classmethod
     def from_input(cls, **kwargs):
-        with open('input.txt') as fp:
-            contents = fp.read()
-        program = [int(n) for n in contents.strip().split(',')]
+        program = read_input_program()
         return cls(program, **kwargs)
 
     def p(self, start=None, end=None):
